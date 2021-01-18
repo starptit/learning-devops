@@ -1,0 +1,39 @@
+version: "3.8"
+
+x-default: &default
+  networks:
+    - swarm-net
+  # cpus: 0.5
+  # mem_limit: 500M
+  restart: always
+  # init: true
+  # privileged: true
+  # stdin_open: true
+  # tty: true
+  # logging:
+  #   driver: "json-file"
+  #   options:
+  #     max-size: "10M"
+  #     max-file: "3"
+
+networks:
+  swarm-net:
+
+# volumes:
+#   mongodb-data:
+#   redis_data:
+
+services:
+  web:
+    <<: *default
+    image: starptit/swarm_demo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: swarm_demo
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+      - 5555:5555
